@@ -1,2 +1,10 @@
 /target/
 *.log
+
+.DS_Store
+.Spotlight-V100
+.Trashes/
+
+.classpath
+.project
+.settings/

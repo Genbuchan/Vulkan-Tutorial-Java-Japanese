@@ -1,86 +1,96 @@
-# Vulkan-Tutorial-Java
-Java port of the [great tutorial by Alexander Overvoorde](https://vulkan-tutorial.com/). The original code can be found [here](https://github.com/Overv/VulkanTutorial).
+# JavaのVulkanチュートリアル (日本語版)
+[Alexander Overvoordeによる素晴らしいチュートリアル](https://vulkan-tutorial.com/)をJavaに移植したものです。オリジナルのコードは[こちら](https://github.com/Overv/VulkanTutorial)。
 
-![Tutorial Image 3](tutorial-image.jpg) 
+![チュートリアル画像3](tutorial-image.jpg) 
 
 ---
-* [Introduction](#introduction)
+* [はじめに](#はじめに)
 * [LWJGL](#lwjgl)
-   * [Native handles](#native-handles)
-   * [Pointers and references](#pointers-and-references)
-   * [Stack allocation](#stack-allocation)
-* [Drawing a triangle](#drawing-a-triangle)
-   * [Setup](#setup)
-      * [Base code](#base-code)
-      * [Instance](#instance)
-      * [Validation layers](#validation-layers)
-      * [Physical devices and queue families](#physical-devices-and-queue-families)
-      * [Logical device and queues](#logical-device-and-queues)
-   * [Presentation](#presentation)
-      * [Window surface](#window-surface)
-      * [Swap chain](#swap-chain)
-      * [Image views](#image-views)
-   * [Graphics pipeline basics](#graphics-pipeline-basics)
-      * [Introduction](#introduction-1)
-      * [Shader Modules](#shader-modules)
-      * [Fixed functions](#fixed-functions)
-      * [Render passes](#render-passes)
-      * [Conclusion](#conclusion)
-   * [Drawing](#drawing)
-      * [Framebuffers](#framebuffers)
-      * [Command buffers](#command-buffers)
-      * [Rendering and presentation](#rendering-and-presentation)
-   * [Swapchain recreation](#swapchain-recreation)
-* [Vertex buffers](#vertex-buffers)
-    * [Vertex input description](#vertex-input-description)
-    * [Vertex buffer creation](#vertex-buffer-creation)
-    * [Staging buffer](#staging-buffer)
-       * [Version with dedicated Transfer Queue](#version-with-dedicated-transfer-queue)
-    * [Index buffer](#index-buffer)
-* [Uniform buffers](#uniform-buffers)
-    * [Descriptor layout and buffer](#descriptor-layout-and-buffer)
-    * [Descriptor pool and sets](#descriptor-pool-and-sets)
-* [Texture mapping](#texture-mapping)
-    * [Images](#images)
-    * [Image view and sampler](#image-view-and-sampler)
-    * [Combined image sampler](#combined-image-sampler)
-* [Depth buffering](#depth-buffering)
-* [Loading models](#loading-models)
-* [Generating Mipmaps](#generating-mipmaps)
-* [Multisampling](#multisampling)
+   * [ネイティブハンドラ](#ネイティブハンドラ)
+   * [ポインタと参照](#ポインタと参照)
+   * [スタックの割り当て](#スタックの割り当て)
+* [三角形の描画](#三角形の描画)
+   * [準備](#準備)
+      * [基本のコード](#基本のコード)
+      * [インスタンス](#インスタンス)
+      * [検証レイヤー](#検証レイヤー)
+      * [物理デバイスとキューファミリー](#物理デバイスとキューファミリー)
+      * [論理デバイスとキュー](#論理デバイスとキュー)
+   * [プレゼンテーション](#プレゼンテーション)
+      * [ウィンドウサーフェス](#ウィンドウサーフェス)
+      * [スワップチェーン](#スワップチェーン)
+      * [画像ビュー](#画像ビュー)
+   * [グラフィックパイプラインの基本](#グラフィックパイプラインの基本)
+      * [はじめに](#はじめに-1)
+      * [シェーダーモジュール](#シェーダーモジュール)
+      * [固定機能](#固定機能)
+      * [レンダーパス](#レンダーパス)
+      * [まとめ](#まとめ)
+   * [描画](#描画)
+      * [フレームバッファ](#フレームバッファ)
+      * [命令バッファ](#命令バッファ)
+      * [レンダリングとプレゼンテーション](#レンダリングとプレゼンテーション)
+   * [スワップチェーンの再作成](#スワップチェーンの再作成)
+* [頂点バッファ](#頂点バッファ)
+    * [頂点入力の解説](#頂点入力の解説)
+    * [頂点バッファの作成](#頂点バッファの作成)
+    * [ステージングバッファ](#ステージングバッファ)
+       * [独立した転送キューのバージョン](#独立した転送キューのバージョン)
+    * [インデックスバッファ](#インデックスバッファ)
+* [ユニフォームバッファ](#ユニフォームバッファ)
+    * [記述子のレイアウトとバッファ](#記述子のレイアウトとバッファ)
+    * [記述子のプールとセット](#記述子のプールとセット)
+* [テクスチャマッピング](#テクスチャマッピング)
+    * [画像](#画像)
+    * [画像ビューとサンプラー](#画像ビューとサンプラー)
+    * [結合した画像のサンプラー](#結合した画像のサンプラー)
+* [深度バッファリング](#深度バッファリング)
+* [モデルの読み込み](#モデルの読み込み)
+* [ミップマップの生成](#ミップマップの生成)
+* [マルチサンプリング](#マルチサンプリング)
 
-## Introduction
+## はじめに
 
-These tutorials are written to be easily followed with the C++ tutorial. However, I've made some changes to fit the Java and LWJGL styles. The repository follows the same structure as in the [original one](https://github.com/Overv/VulkanTutorial/tree/master/code).
+これらのチュートリアルは、C++のチュートリアルに沿って簡単に進められるように書かれています。
 
-Every chapter have its own Java file to make them independent to each other. However, there are some common classes that many of them need:
+なお、JavaとLWJGLのスタイルに合わせるために、いくつかの変更が行われています。当リポジトリは[オリジナル](https://github.com/Overv/VulkanTutorial/tree/master/code)と同じ構造になっています。
 
-  - [AlignmentUtils](src/main/java/javavulkantutorial/AlignmentUtils.java): Utility class for dealing with uniform buffer object alignments.
-  - [Frame](src/main/java/javavulkantutorial/Frame.java): A wrapper around all the necessary Vulkan handles for an in-flight frame (*image-available semaphore*, *render-finished semaphore* and a *fence*).
-  - [ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java): An utility class for loading 3D models. They are loaded with [Assimp](http://www.assimp.org/).
-  - [ShaderSPIRVUtils](src/main/java/javavulkantutorial/ShaderSPIRVUtils.java): An utility class for compiling GLSL shaders into SPIRV binaries at runtime.
-  
-For maths calculations I will be using [JOML](https://github.com/JOML-CI/JOML), a Java math library for graphics mathematics. Its very similar to [GLM](https://glm.g-truc.net/0.9.9/index.html).
+各チャプターには、それぞれ別々のJavaのコードが用意されています。しかし、多くのチャプターで共通するクラスがいくつかあります。
 
-Finally, each chapter have its own .diff file, so you can quickly see the changes made between chapters.
+  - [AlignmentUtils](src/main/java/javavulkantutorial/AlignmentUtils.java): 均一なバッファオブジェクトのアライメントを扱うためのユーティリティクラス。
+  - [Frame](src/main/java/javavulkantutorial/Frame.java): 実行中のフレームに必要なVulkanハンドル (*画像が利用可能なセマフォ*、*レンダー完了セマフォ*、*フェンス*)。
+  - [ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java): 3Dモデルを読み込むためのユーティリティクラス。[Assimp](http://www.assimp.org/)を利用しています。
+  - [ShaderSPIRVUtils](src/main/java/javavulkantutorial/ShaderSPIRVUtils.java): GLSLシェーダをランタイムでSPIRVのバイナリにコンパイルするためのユーティリティクラス。
 
-Please note that the Java code is more verbose than C or C++, so the source files are larger.
+数値計算には、グラフィック数学用のJavaのライブラリであるJOMLを使用します。これは[GLM](https://glm.g-truc.net/0.9.9/index.html)にかなりよく似ています。
+
+最後に、各章にはそれぞれ.差分ファイルが用意されており、章ごとの変更点をすぐ確認できます。
+
+なお、JavaのコードはC/C++より冗長であり、ソースファイルが大きくなることをご了承ください。
 
 ## LWJGL
 
-I'm going to be using [LWJGL (Lightweight Java Game Library)](https://www.lwjgl.org/), a fantastic low level API for Java with bindings for GLFW, Vulkan, OpenGL, and other C libraries.
+今回は、LWJGLという極めて低レベルなGLFW、Vulkan、OpenGL、その他CライブラリのJavaバインディングを使用します。
 
-If you don't know LWJGL, it may be difficult to you to understand certain concepts and patterns you will see throughout this tutorials. I will briefly explain some of the most important
-concepts you need to know to properly follow the code.
+もしあなたがLWJGLを知らないのであれば、このチュートリアルに登場する概念やパターンを理解するのが難しいかもしれません。
 
-### Native handles
+ここでは、コードを正しく理解するために必要な、最も重要な概念を簡単に説明します。
 
-Vulkan has its own handles named properly, such as VkImage, VkBuffer or VkCommandPool. These are unsigned integer numbers behind the scenes, and because Java
-does not have typedefs, we need to use *long* as the type of all of those objects. For that reason, you will see lots of *long* variables.
+### ネイティブハンドラ
 
-### Pointers and references
+Vulkanには、`VkImage`、`VkBuffer`、`VkCommandPool`など、適切に名付けられた独自のハンドルがあります。
 
-Some structs and functions will take as parameters references and pointers to other variables, for example to output multiple values. Consider this function in C:
+これらは裏では符号なしの整数値であり、Javaにはその型定義がありません。
+
+そのため、これらのオブジェクトの全ての型として`long`型を使用する必要があります。
+
+これが、`long`型の変数がたくさん登場する理由です。
+
+### ポインタと参照
+
+構造体や関数の中には、他の変数への参照やポインタをパラメータとして受け取るものがあります。例えば、複数の値を出力するものが該当します。
+
+この関数をC言語で考えてみましょう。
 
 ```C
 
@@ -89,18 +99,21 @@ int height;
 
 glfwGetWindowSize(window, &width, &height);
 
-// Now width and height contains the window dimension values
+// widthとheightは、ウィンドウの縦横の大きさです。
 
 ```
 
-We pass in 2 *int* pointers, and the function writes the memory pointed by them. Easy and fast.
+2つの`int`型のポインタを渡すと、関数はそのポインタが指すメモリを書き込みます。簡単で、しかも高速ですね。
 
-But how about in Java? There is no concept of pointer at all. While we can pass a copy of a reference and modify the object's contents inside
-a function, we cannot do so with primitives.
-We have two options. We can use either an int array, which is effectively an object, or to use [Java NIO Buffers](https://docs.oracle.com/javase/7/docs/api/java/nio/Buffer.html).
-Buffers in LWJGL are basically a windowed array, with an internal position and limit. We are going to use these buffers, since we can allocate them off heap, as we will see later.
+では、Javaではどうなるでしょうか。そもそもポインタという概念がありませんよね。参照のコピーを渡して、関数の中でオブジェクトの内容を変更することはできますが、プリミティブ型ではそれができません。
 
-Then, the above function will look like this with NIO Buffers:
+方法は2つあります。まず、`int`型の配列を使用するか、Javaの[NIOバッファ](https://docs.oracle.com/javase/7/docs/api/java/nio/Buffer.html)を使用するかです。
+
+LWJGLのバッファは、基本的にはウィンドウの配列で、内部に位置と制限があります。
+
+後述しますが、これらのバッファを使用する際、ヒープから割り当てることができます。
+
+上記の`glfwGetWindowSize`関数をNIOバッファで扱う場合は、以下のようになります。
 
 ```Java
 
@@ -112,17 +125,18 @@ glfwGetWindowSize(window, width, height);
 // Print the values 
 System.out.println("width = " + width.get(0));
 System.out.println("height = " + height.get(0));
+
 ```
 
-Nice, now we can pass pointers to primitive values, but we are dynamically allocating 2 new objects for just 2 integers.
-And what if we only need these 2 variables for a short period of time? We need to wait for the Garbage Collector to get rid of those 
-disposable variables.
+やりました！プリミティブな値のポインタを渡すことができましたね。…でも、たった2つの整数のために、2つも新しいオブジェクトを動的に割り当ててしまっています。
 
-Luckily for us, LWJGL solves this problem with its own memory management system. You can learn about that [here](https://github.com/LWJGL/lwjgl3-wiki/wiki/1.3.-Memory-FAQ).
+もしこの2つのオブジェクトが、短時間しか必要ないものだったらどうしましょう？ガベージコレクタが、これらの使い捨ての変数を掃除してくれるのを待たないといけませんね。
 
-### Stack allocation
+幸いなことに、LWJGLは独自のメモリ管理システムでこの問題を解決しています。詳しくは[こちら](https://github.com/LWJGL/lwjgl3-wiki/wiki/1.3.-Memory-FAQ)で知ることができます。
 
-In C and C++, we can easily allocate objects on the stack:
+### スタックの割り当て
+
+C/C++では、スタック上に簡単にオブジェクトを割り当てることができます。
 
 ```C++
 
@@ -131,10 +145,11 @@ VkApplicationInfo appInfo = {};
 
 ```
 
-However, this is not possible in Java.
-Fortunately for us, LWJGL allows us to kind of stack allocate variables on the stack. For that, we need a [MemoryStack](https://javadoc.lwjgl.org/org/lwjgl/system/MemoryStack.html) instance.
-Since a stack frame is pushed at the beginning of a function and is popped at the end, no matter what happens in the middle, we should
-use try-with-resources syntax to imitate this behaviour:
+しかし、Javaではこれができません。
+
+が、これまた幸運なことに、LWJGLではスタック上に変数を割り当てることができるようになっています。そのためには、[MemoryStack](https://javadoc.lwjgl.org/org/lwjgl/system/MemoryStack.html)インスタンスが必要です。
+
+スタックフレームは、関数の最初にプッシュ(スタックの末尾に追加)され、最後にポップ(取り出し)します。そのため、途中で何が起こっても構いません。try-with-resources構文を使い、この動作を真似てみましょう。
 
 ```Java
 
@@ -143,37 +158,35 @@ try(MemoryStack stack = stackPush()) {
   // ...
   
   
-} // By this line, stack is popped and all the variables in this stack frame are released
+} // この行では、スタックがポップされ、このスタックフレームないの全ての変数が解放されます。
 
 ```
 
-Great, now we are able to use stack allocation in Java. Let's see how it looks like:
+いいですね！Javaでスタックの割り当てができるようになりました。どんなものか見てみましょう。
 
 ```Java
 
 try(MemoryStack stack = stackPush()) {
 
-  IntBuffer width = stack.mallocInt(1); // 1 int unitialized
-  IntBuffer height = stack.ints(0); // 1 int initialized with 0
+  IntBuffer width = stack.mallocInt(1); // int型を1つ割り当て(未初期化)
+  IntBuffer height = stack.ints(0); // 0で初期化
 
   glfwGetWindowSize(window, width, height);
 
-  // Print the values 
+  // 値を出力
   System.out.println("width = " + width.get(0));
   System.out.println("height = " + height.get(0));
 }
 
 ```
-
-Now let's see a real Vulkan example with *MemoryStack*:
-
+さあ、`MemoryStack`を使った実際のVulkanの例を見てみましょう。
 ```Java
 
 private void createInstance() {
 
     try(MemoryStack stack = stackPush()) {
 
-        // Use calloc to initialize the structs with 0s. Otherwise, the program can crash due to random values
+        // 構造体を0で初期化するにはcallocを使います。そうしないと、ランダムな値が原因でプログラムがクラッシュすることがあります。
 
         VkApplicationInfo appInfo = VkApplicationInfo.callocStack(stack);
 
@@ -188,12 +201,12 @@ private void createInstance() {
 
         createInfo.sType(VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO);
         createInfo.pApplicationInfo(appInfo);
-        // enabledExtensionCount is implicitly set when you call ppEnabledExtensionNames
+        // enabledExtensionCountは、ppEnabledExtensionNamesを呼び出した際に暗黙的に設定されます。
         createInfo.ppEnabledExtensionNames(glfwGetRequiredInstanceExtensions());
-        // same with enabledLayerCount
+        // enabledLayerCountでも同様です。
         createInfo.ppEnabledLayerNames(null);
 
-        // We need to retrieve the pointer of the created instance
+        // 作成したインスタンスのポインタを取得する必要があります。
         PointerBuffer instancePtr = stack.mallocPointer(1);
 
         if(vkCreateInstance(createInfo, null, instancePtr) != VK_SUCCESS) {
@@ -206,331 +219,343 @@ private void createInstance() {
 
 ```
 
-## Drawing a triangle
-### Setup
-#### Base code
+## 三角形の描画
+### 準備
+#### 基本のコード
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Base_code)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Base_code)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/00_base_code.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/00_base_code.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch00BaseCode.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch00BaseCode.java)
 
-#### Instance
+#### インスタンス
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Instance)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Instance)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/01_instance_creation.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/01_instance_creation.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch01InstanceCreation.java)
+![java](java_icon.png)[Javaの](src/main/java/javavulkantutorial/Ch01InstanceCreation.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch01InstanceCreation.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch01InstanceCreation.差分)
 
-#### Validation layers
+#### 検証レイヤー
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Validation_layers)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Validation_layers)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/02_validation_layers.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/02_validation_layers.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch02ValidationLayers.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch02ValidationLayers.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch02ValidationLayers.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch02ValidationLayers.差分)
 
 
-#### Physical devices and queue families
+#### 物理デバイスとキューファミリー
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Physical_devices_and_queue_families)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Physical_devices_and_queue_families)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/03_physical_device_selection.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/03_physical_device_selection.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.差分)
 
 
-#### Logical device and queues
+#### 論理デバイスとキュー
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Logical_device_and_queues)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Logical_device_and_queues)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/04_logical_device.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/04_logical_device.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch04LogicalDevice.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch04LogicalDevice.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch04LogicalDevice.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch04LogicalDevice.差分)
 
-### Presentation
+### プレゼンテーション
 
-#### Window surface
+#### ウィンドウサーフェス
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Window_surface)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Window_surface)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/05_window_surface.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/05_window_surface.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch05WindowSurface.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch05WindowSurface.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch05WindowSurface.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch05WindowSurface.差分)
 
-#### Swap chain
+#### スワップチェーン
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Swap_chain)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Swap_chain)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/06_swap_chain_creation.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/06_swap_chain_creation.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch06SwapChainCreation.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch06SwapChainCreation.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch06SwapChainCreation.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch06SwapChainCreation.差分)
 
-#### Image views
+#### 画像ビュー
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Image_views)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Presentation/Image_views)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/07_image_views.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/07_image_views.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch07ImageViews.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch07ImageViews.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch07ImageViews.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch07ImageViews.差分)
 
-### Graphics pipeline basics
-#### Introduction
+### グラフィックパイプラインの基礎
+#### はじめに
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/08_graphics_pipeline.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/08_graphics_pipeline.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.差分)
 
-#### Shader Modules
+#### シェーダーモジュール
 
-The shaders are compiled into SPIRV at runtime using [*shaderc*](https://github.com/google/shaderc) library. GLSL files are located at the [resources/shaders](src/main/resources/shaders/) folder.
+シェーダーは[*shaderc*](https://github.com/google/shaderc)ライブラリを用いてSPIRVにコンパイルされます。GLSLファイルは[resources/shaders](src/main/resources/shaders/)フォルダにあります。
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Shader_modules)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Shader_modules)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/09_shader_modules.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/09_shader_modules.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch09ShaderModules.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch09ShaderModules.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch09ShaderModules.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch09ShaderModules.差分)
 
-#### Fixed functions
+#### 固定機能
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Fixed_functions)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Fixed_functions)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/10_fixed_functions.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/10_fixed_functions.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch10FixedFunctions.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch10FixedFunctions.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch10FixedFunctions.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch10FixedFunctions.差分)
 
-#### Render passes
+#### レンダーパス
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Render_passes)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Render_passes)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/11_render_passes.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/11_render_passes.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch11RenderPasses.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch11RenderPasses.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch11RenderPasses.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch11RenderPasses.差分)
 
-#### Conclusion
+#### まとめ
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Conclusion)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Graphics_pipeline_basics/Conclusion)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/12_graphics_pipeline_complete.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/12_graphics_pipeline_complete.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.差分)
 
-### Drawing
-#### Framebuffers
+### 描画
+#### フレームバッファ
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Framebuffers)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Framebuffers)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/13_framebuffers.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/13_framebuffers.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch13Framebuffers.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch13Framebuffers.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch13Framebuffers.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch13Framebuffers.差分)
 
-#### Command buffers
+#### 命令バッファ
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Command_buffers)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Command_buffers)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/14_command_buffers.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/14_command_buffers.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch14CommandBuffers.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch14CommandBuffers.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch14CommandBuffers.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch14CommandBuffers.差分)
 
-#### Rendering and presentation
+#### レンダリングとプレゼンテーション
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Rendering_and_presentation)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Drawing/Rendering_and_presentation)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/15_hello_triangle.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/15_hello_triangle.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch15HelloTriangle.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch15HelloTriangle.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch15HelloTriangle.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch15HelloTriangle.差分)
 
-### Swapchain recreation
+### スワップチェーンの再作成
 
-[Read the tutorial](https://vulkan-tutorial.com/Drawing_a_triangle/Swap_chain_recreation)
+[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Swap_chain_recreation)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/16_swap_chain_recreation.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/16_swap_chain_recreation.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.差分)
 
-## Vertex buffers
-### Vertex input description
-*(Will cause Validation Layer errors, but that will be fixed in the next chapter)*
+## 頂点バッファ
+### 頂点入力の解説
+*(検証レイヤーのエラーが発生しますが、次の章で修正します。)*
 
-[Read the tutorial](https://vulkan-tutorial.com/Vertex_buffers/Vertex_input_description)
+[チュートリアル](https://vulkan-tutorial.com/Vertex_buffers/Vertex_input_description)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/17_vertex_input.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/17_vertex_input.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch17VertexInput.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch17VertexInput.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch17VertexInput.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch17VertexInput.差分)
 
-### Vertex buffer creation
+### 頂点バッファの作成
 
-[Read the tutorial](https://vulkan-tutorial.com/Vertex_buffers/Vertex_buffer_creation)
+[チュートリアル](https://vulkan-tutorial.com/Vertex_buffers/Vertex_buffer_creation)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/18_vertex_buffer.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/18_vertex_buffer.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch18VertexBuffer.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch18VertexBuffer.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch18VertexBuffer.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch18VertexBuffer.差分)
 
-### Staging buffer
+### ステージングバッファ
 
-[Read the tutorial](https://vulkan-tutorial.com/Vertex_buffers/Staging_buffer)
+[チュートリアル](https://vulkan-tutorial.com/Vertex_buffers/Staging_buffer)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/19_staging_buffer.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/19_staging_buffer.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch19StagingBuffer.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch19StagingBuffer.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch19StagingBuffer.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch19StagingBuffer.差分)
 
-#### Version with dedicated Transfer Queue
+#### 独立した転送キューのバージョン
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.差分)
 
-### Index buffer
+### インデックスバッファ
 
-[Read the tutorial](https://vulkan-tutorial.com/Vertex_buffers/Index_buffer)
+[チュートリアル](https://vulkan-tutorial.com/Vertex_buffers/Index_buffer)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/20_index_buffer.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/20_index_buffer.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch20IndexBuffer.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch20IndexBuffer.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch20IndexBuffer.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch20IndexBuffer.差分)
 
-## Uniform buffers
-### Uniform Buffer Object
+## ユニフォームバッファ
+### ユニフォームバッファオブジェクト
 
-#### Descriptor layout and buffer
+#### 記述子のレイアウトとバッファ
 
-[Read the tutorial](https://vulkan-tutorial.com/Uniform_buffers/Descriptor_layout_and_buffer)
+[チュートリアル](https://vulkan-tutorial.com/Uniform_buffers/Descriptor_layout_and_buffer)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/21_descriptor_layout.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/21_descriptor_layout.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch21DescriptorLayout.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch21DescriptorLayout.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch21DescriptorLayout.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch21DescriptorLayout.差分)
 
-#### Descriptor pool and sets
+#### 記述子のプールとセット
 
-[Read the tutorial](https://vulkan-tutorial.com/Uniform_buffers/Descriptor_pool_and_sets)
+[チュートリアル](https://vulkan-tutorial.com/Uniform_buffers/Descriptor_pool_and_sets)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/22_descriptor_sets.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/22_descriptor_sets.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch22DescriptorSets.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch22DescriptorSets.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch22DescriptorSets.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch22DescriptorSets.差分)
 
 
-## Texture mapping
-### Images
+## テクスチャマッピング
+### 画像
 
-[Read the tutorial](https://vulkan-tutorial.com/Texture_mapping/Images)
+[チュートリアル](https://vulkan-tutorial.com/Texture_mapping/Images)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/23_texture_image.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/23_texture_image.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch23TextureImage.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch23TextureImage.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch23TextureImage.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch23TextureImage.差分)
 
-### Image view and sampler
+### 画像ビューとサンプラー
 
-[Read the tutorial](https://vulkan-tutorial.com/Texture_mapping/Image_view_and_sampler)
+[チュートリアル](https://vulkan-tutorial.com/Texture_mapping/Image_view_and_sampler)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/24_sampler.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/24_sampler.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch24Sampler.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch24Sampler.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch24Sampler.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch24Sampler.差分)
 
-### Combined image sampler
+### 結合した画像のサンプラー
 
-[Read the tutorial](https://vulkan-tutorial.com/Texture_mapping/Combined_image_sampler)
+[チュートリアル](https://vulkan-tutorial.com/Texture_mapping/Combined_image_sampler)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/25_texture_mapping.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/25_texture_mapping.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch25TextureMapping.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch25TextureMapping.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch25TextureMapping.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch25TextureMapping.差分)
 
 
-## Depth buffering
+## 深度バッファリング
 
-[Read the tutorial](https://vulkan-tutorial.com/Depth_buffering)
+[チュートリアル](https://vulkan-tutorial.com/Depth_buffering)
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/26_depth_buffering.cpp)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/26_depth_buffering.cpp)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch26DepthBuffering.java)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch26DepthBuffering.java)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch26DepthBuffering.diff)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch26DepthBuffering.差分)
 
-## Loading models
+## モデルの読み込み
 
-The models will be loaded using [Assimp](), a library for loading 3D models in different formats which LWJGL has bindings for. I have wrapped all the model loading stuff into the [ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java) class.
+モデルの読み込みには、LWJGLのバインディングの一部である、異なるフォーマットの3Dモデルを読み込むライブラリの[Assimp](https://assimp.org/)を使用します。
 
-[Read the tutorial](https://vulkan-tutorial.com/Loading_models)
+今回は、モデルの読み込みに関する処理は全て[ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java)クラスにまとめています。
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/27_model_loading.cpp)
+[チュートリアル](https://vulkan-tutorial.com/Loading_models)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch27ModelLoading.java)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/27_model_loading.cpp)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch27ModelLoading.diff)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch27ModelLoading.java)
 
-## Generating Mipmaps
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch27ModelLoading.差分)
 
-[Read the tutorial](https://vulkan-tutorial.com/Generating_Mipmaps)
+## ミップマップの生成
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/28_mipmapping.cpp)
+[チュートリアル](https://vulkan-tutorial.com/Generating_Mipmaps)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch28Mipmapping.java)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/28_mipmapping.cpp)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch28Mipmapping.diff)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch28Mipmapping.java)
 
-## Multisampling
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch28Mipmapping.差分)
 
-[Read the tutorial](https://vulkan-tutorial.com/Multisampling)
+## マルチサンプリング
 
-![c++](cpp_icon.png)[Original code](https://github.com/Overv/VulkanTutorial/blob/master/code/29_multisampling.cpp)
+[チュートリアル](https://vulkan-tutorial.com/Multisampling)
 
-![java](java_icon.png)[Java code](src/main/java/javavulkantutorial/Ch29Multisampling.java)
+![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/29_multisampling.cpp)
 
-![diff](git_icon.png)[Diff](src/main/java/javavulkantutorial/Ch29Multisampling.diff)
+![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch29Multisampling.java)
+
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch29Multisampling.差分)
 
 
 
 ---
-*Icons made by [Icon Mafia](https://iconscout.com/contributors/icon-mafia)*
+*アイコンは[Icon Mafia](https://iconscout.com/contributors/icon-mafia)が制作しました。*
+
+## 日本語版の免責事項
+
+当ドキュメントは、[Genbuchan](https://github.com/Genbuchan)がJavaでVulkanを学習するために、独自で日本語化したものです。
+
+そのため、原文と日本語版の文脈に齟齬がある可能性があります。
+
+もし、ドキュメントの問題の指摘や改善に協力してくださる方がいらっしゃいましたら、IssueまたはPull Requestをお願いします。
+
+翻訳の補助には[DeepL Translator](https://www.deepl.com)を使用しました。
