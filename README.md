@@ -64,7 +64,7 @@
 
 数値計算には、グラフィック数学用のJavaのライブラリであるJOMLを使用します。これは[GLM](https://glm.g-truc.net/0.9.9/index.html)にかなりよく似ています。
 
-最後に、各章にはそれぞれ.差分ファイルが用意されており、章ごとの変更点をすぐ確認できます。
+最後に、各章にはそれぞれ.diffファイルが用意されており、章ごとの変更点をすぐ確認できます。
 
 なお、JavaのコードはC/C++より冗長であり、ソースファイルが大きくなることをご了承ください。
 
@@ -237,7 +237,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaの](src/main/java/javavulkantutorial/Ch01InstanceCreation.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch01InstanceCreation.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch01InstanceCreation.diff)
 
 #### 検証レイヤー
 
@@ -247,7 +247,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch02ValidationLayers.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch02ValidationLayers.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch02ValidationLayers.diff)
 
 
 #### 物理デバイスとキューファミリー
@@ -258,7 +258,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch03PhysicalDeviceSelection.diff)
 
 
 #### 論理デバイスとキュー
@@ -269,7 +269,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch04LogicalDevice.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch04LogicalDevice.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch04LogicalDevice.diff)
 
 ### プレゼンテーション
 
@@ -281,7 +281,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch05WindowSurface.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch05WindowSurface.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch05WindowSurface.diff)
 
 #### スワップチェーン
 
@@ -291,7 +291,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch06SwapChainCreation.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch06SwapChainCreation.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch06SwapChainCreation.diff)
 
 #### 画像ビュー
 
@@ -301,7 +301,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch07ImageViews.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch07ImageViews.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch07ImageViews.diff)
 
 ### グラフィックパイプラインの基礎
 #### はじめに
@@ -312,7 +312,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch08GraphicsPipeline.diff)
 
 #### シェーダーモジュール
 
@@ -324,7 +324,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch09ShaderModules.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch09ShaderModules.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch09ShaderModules.diff)
 
 #### 固定機能
 
@@ -334,7 +334,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch10FixedFunctions.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch10FixedFunctions.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch10FixedFunctions.diff)
 
 #### レンダーパス
 
@@ -344,7 +344,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch11RenderPasses.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch11RenderPasses.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch11RenderPasses.diff)
 
 #### まとめ
 
@@ -354,7 +354,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch12GraphicsPipelineComplete.diff)
 
 ### 描画
 #### フレームバッファ
@@ -365,7 +365,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch13Framebuffers.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch13Framebuffers.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch13Framebuffers.diff)
 
 #### 命令バッファ
 
@@ -375,7 +375,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch14CommandBuffers.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch14CommandBuffers.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch14CommandBuffers.diff)
 
 #### レンダリングとプレゼンテーション
 
@@ -385,7 +385,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch15HelloTriangle.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch15HelloTriangle.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch15HelloTriangle.diff)
 
 ### スワップチェーンの再作成
 
@@ -395,7 +395,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch16SwapChainRecreation.diff)
 
 ## 頂点バッファ
 ### 頂点入力の解説
@@ -407,7 +407,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch17VertexInput.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch17VertexInput.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch17VertexInput.diff)
 
 ### 頂点バッファの作成
 
@@ -417,7 +417,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch18VertexBuffer.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch18VertexBuffer.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch18VertexBuffer.diff)
 
 ### ステージングバッファ
 
@@ -427,13 +427,13 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch19StagingBuffer.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch19StagingBuffer.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch19StagingBuffer.diff)
 
 #### 独立した転送キューのバージョン
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch19StagingBufferTransferQueue.diff)
 
 ### インデックスバッファ
 
@@ -443,7 +443,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch20IndexBuffer.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch20IndexBuffer.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch20IndexBuffer.diff)
 
 ## ユニフォームバッファ
 ### ユニフォームバッファオブジェクト
@@ -456,7 +456,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch21DescriptorLayout.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch21DescriptorLayout.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch21DescriptorLayout.diff)
 
 #### 記述子のプールとセット
 
@@ -466,7 +466,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch22DescriptorSets.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch22DescriptorSets.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch22DescriptorSets.diff)
 
 
 ## テクスチャマッピング
@@ -478,7 +478,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch23TextureImage.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch23TextureImage.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch23TextureImage.diff)
 
 ### 画像ビューとサンプラー
 
@@ -488,7 +488,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch24Sampler.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch24Sampler.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch24Sampler.diff)
 
 ### 結合した画像のサンプラー
 
@@ -498,7 +498,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch25TextureMapping.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch25TextureMapping.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch25TextureMapping.diff)
 
 
 ## 深度バッファリング
@@ -509,7 +509,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch26DepthBuffering.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch26DepthBuffering.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch26DepthBuffering.diff)
 
 ## モデルの読み込み
 
@@ -523,7 +523,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch27ModelLoading.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch27ModelLoading.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch27ModelLoading.diff)
 
 ## ミップマップの生成
 
@@ -533,7 +533,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch28Mipmapping.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch28Mipmapping.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch28Mipmapping.diff)
 
 ## マルチサンプリング
 
@@ -543,7 +543,7 @@ private void createInstance() {
 
 ![java](java_icon.png)[Javaのコード](src/main/java/javavulkantutorial/Ch29Multisampling.java)
 
-![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch29Multisampling.差分)
+![差分](git_icon.png)[差分](src/main/java/javavulkantutorial/Ch29Multisampling.diff)
 
 
 
