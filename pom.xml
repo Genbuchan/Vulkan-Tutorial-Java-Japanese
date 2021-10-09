@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>naitsirc98</groupId>
-    <artifactId>vulkan-tutorial-java</artifactId>
+    <groupId>studio.genbu</groupId>
+    <artifactId>vulkan-tutorial-java-japanese</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <lwjgl.version>3.2.3</lwjgl.version>
+        <lwjgl.version>3.3.0-SNAPSHOT</lwjgl.version>
         <joml.version>1.9.20</joml.version>
     </properties>
 
@@ -55,30 +55,6 @@
             </properties>
         </profile>
         <profile>
-            <id>lwjgl-natives-linux-arm</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <arch>arm</arch>
-                </os>
-            </activation>
-            <properties>
-                <lwjgl.natives>natives-linux-arm32</lwjgl.natives>
-            </properties>
-        </profile>
-        <profile>
-            <id>lwjgl-natives-linux-arm32</id>
-            <activation>
-                <os>
-                    <family>unix</family>
-                    <arch>arm32</arch>
-                </os>
-            </activation>
-            <properties>
-                <lwjgl.natives>natives-linux-arm32</lwjgl.natives>
-            </properties>
-        </profile>
-        <profile>
             <id>lwjgl-natives-macos-amd64</id>
             <activation>
                 <os>
@@ -98,6 +74,25 @@
             </dependencies>
         </profile>
         <profile>
+            <id>lwjgl-natives-macos-aarch64</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                    <arch>aarch64</arch>
+                </os>
+            </activation>
+            <properties>
+                <lwjgl.natives>natives-macos-arm64</lwjgl.natives>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.lwjgl</groupId>
+                    <artifactId>lwjgl-vulkan</artifactId>
+                    <classifier>natives-macos-arm64</classifier>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>lwjgl-natives-windows-amd64</id>
             <activation>
                 <os>
@@ -110,18 +105,27 @@
             </properties>
         </profile>
         <profile>
-            <id>lwjgl-natives-windows-x86</id>
+            <id>lwjgl-natives-windows-aarch64</id>
             <activation>
                 <os>
                     <family>windows</family>
-                    <arch>x86</arch>
+                    <arch>aarch64</arch>
                 </os>
             </activation>
             <properties>
-                <lwjgl.natives>natives-windows-x86</lwjgl.natives>
+                <lwjgl.natives>natives-windows-arm64</lwjgl.natives>
             </properties>
         </profile>
     </profiles>
+
+    <repositories>
+		<repository>
+			<id>sonatype-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases><enabled>false</enabled></releases>
+			<snapshots><enabled>true</enabled></snapshots>
+		</repository>
+	</repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -197,8 +201,9 @@
         <dependency>
             <groupId>org.joml</groupId>
             <artifactId>joml</artifactId>
-            <version>${joml.version}</version>
+            <version>1.10.2</version>
         </dependency>
+        
     </dependencies>
 
 </project>

@@ -62,11 +62,11 @@
   - [ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java): 3Dモデルを読み込むためのユーティリティクラス。[Assimp](http://www.assimp.org/)を利用しています。
   - [ShaderSPIRVUtils](src/main/java/javavulkantutorial/ShaderSPIRVUtils.java): GLSLシェーダをランタイムでSPIRVのバイナリにコンパイルするためのユーティリティクラス。
 
-数値計算には、グラフィック数学用のJavaのライブラリであるJOMLを使用します。これは[GLM](https://glm.g-truc.net/0.9.9/index.html)にかなりよく似ています。
+数値計算には、グラフィック数学用のJavaのライブラリである[JOML](https://joml-ci.github.io/JOML/)を使用します。これは[GLM](https://glm.g-truc.net/0.9.9/index.html)にかなりよく似ています。
 
 最後に、各章にはそれぞれ.diffファイルが用意されており、章ごとの変更点をすぐ確認できます。
 
-なお、JavaのコードはC/C++より冗長であり、ソースファイルが大きくなることをご了承ください。
+なお、本チュートリアルのJavaのコードはC/C++よりも冗長であり、その分ソースファイルが大きくなることをご了承ください。
 
 ## LWJGL
 
@@ -147,7 +147,7 @@ VkApplicationInfo appInfo = {};
 
 しかし、Javaではこれができません。
 
-が、これまた幸運なことに、LWJGLではスタック上に変数を割り当てることができるようになっています。そのためには、[MemoryStack](https://javadoc.lwjgl.org/org/lwjgl/system/MemoryStack.html)インスタンスが必要です。
+が、これまた幸運なことに、LWJGLではスタック上に変数を割り当てることができるようになっています。そのためには、[MemoryStack](https://javadoc.lwjgl.org/org/lwjgl/system/MemoryStack.html)のインスタンスが必要です。
 
 スタックフレームは、関数の最初にプッシュ(スタックの末尾に追加)され、最後にポップ(取り出し)します。そのため、途中で何が起こっても構いません。try-with-resources構文を使い、この動作を真似てみましょう。
 
@@ -158,7 +158,7 @@ try(MemoryStack stack = stackPush()) {
   // ...
   
   
-} // この行では、スタックがポップされ、このスタックフレームないの全ての変数が解放されます。
+} // この行では、スタックがポップされ、このスタックフレーム内の全ての変数が解放されます。
 
 ```
 
@@ -513,9 +513,9 @@ private void createInstance() {
 
 ## モデルの読み込み
 
-モデルの読み込みには、LWJGLのバインディングの一部である、異なるフォーマットの3Dモデルを読み込むライブラリの[Assimp](https://assimp.org/)を使用します。
+モデルの読み込みには[Assimp](https://assimp.org/)を使用します。これは、異なるフォーマットの3Dモデルを読み込むライブラリであり、LWJGLのバインディングの一部として含まれています。
 
-今回は、モデルの読み込みに関する処理は全て[ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java)クラスにまとめています。
+今回は、Assimpを用いたモデルの読み込みに関する処理を[ModelLoader](src/main/java/javavulkantutorial/ModelLoader.java)クラスにまとめています。
 
 [チュートリアル](https://vulkan-tutorial.com/Loading_models)
 
