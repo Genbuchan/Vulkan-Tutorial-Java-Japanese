@@ -351,8 +351,8 @@ throw new RuntimeException("GLFWの初期化に失敗しました");
 
 ```java
 
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
 ```
 
