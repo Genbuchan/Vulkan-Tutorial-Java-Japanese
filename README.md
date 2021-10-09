@@ -223,7 +223,9 @@ private void createInstance() {
 ### 準備
 #### 基本のコード
 
-[チュートリアル](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Base_code)
+[Java版チュートリアル (日本語)](tutorials/drawing-a-triangle/setup/base-code.md)
+
+[C++版チュートリアル (英語)](https://vulkan-tutorial.com/Drawing_a_triangle/Setup/Base_code)
 
 ![c++](cpp_icon.png)[元のコード](https://github.com/Overv/VulkanTutorial/blob/master/code/00_base_code.cpp)
 
